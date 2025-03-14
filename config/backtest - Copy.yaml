@@ -1,0 +1,12 @@
+symbol: "EURUSD_o"
+timeframe: "M1"
+start_date: "2025-01-01"
+end_date: "2025-01-31"
+initial_balance: 100.0
+optimization:
+  enabled: true
+  metric: "sharpe_ratio"
+  parameters:
+    lookback_window: [ 12, 24, 48 ]
+    neurons: [ 30, 50, 70 ]
+    dropout: [ 0.1, 0.2, 0.3 ]

@@ -1,0 +1,15 @@
+Collecting python-dateutil
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting pytz
+  Downloading pytz-2025.1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting joblib
+  Downloading joblib-1.4.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting threadpoolctl
+  Downloading threadpoolctl-3.5.0-py3-none-any.whl.metadata (13 kB)
+Requirement already satisfied: six>=1.5 in c:\anaconda3\envs\tf_env\lib\site-packages (from python-dateutil) (1.17.0)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading pytz-2025.1-py2.py3-none-any.whl (507 kB)
+Downloading joblib-1.4.2-py3-none-any.whl (301 kB)
+Downloading threadpoolctl-3.5.0-py3-none-any.whl (18 kB)
+Installing collected packages: pytz, threadpoolctl, python-dateutil, joblib
+Successfully installed joblib-1.4.2 python-dateutil-2.9.0.post0 pytz-2025.1 threadpoolctl-3.5.0

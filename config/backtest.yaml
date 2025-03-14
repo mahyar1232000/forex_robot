@@ -1,0 +1,11 @@
+symbol: "EURUSD_o"
+timeframe: "H1"
+start_date: "2023-01-01"
+end_date: "2023-01-15"
+risk_per_trade: 0.01
+strategy:
+  model_path: "models/lstm_model.h5"
+  parameters:
+    model_path: "models/lstm_model.h5"
+    threshold_buy: 0.6
+    threshold_sell: 0.4

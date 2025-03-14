@@ -1,0 +1,32 @@
+forex_robot/
+├── config/
+│   ├── live.yaml
+│   └── backtest.yaml
+├── data/
+│   └── dataset.csv           # Your historical data CSV (must include at least a “close” column)
+├── models/
+│   └── lstm_model.h5         # Will be created automatically if not found
+├── main.py
+├── requirements.txt
+└── src/
+    ├── __init__.py
+    ├── core/
+    │   ├── __init__.py
+    │   ├── AdvancedRiskManager.py
+    │   ├── Broker.py
+    │   ├── DataManager.py
+    │   ├── LSTMTradingStrategy.py
+    │   ├── PerformanceMonitor.py
+    │   └── WalkForwardOptimizer.py
+    ├── modes/
+    │   ├── __init__.py
+    │   ├── backtest.py
+    │   └── live.py
+    ├── gui/
+    │   ├── __init__.py
+    │   ├── backtest_dashboard.py
+    │   └── live_dashboard.py
+    ├── train.py              # Training script for the LSTM model
+    └── utils/
+        ├── __init__.py
+        └── config.py

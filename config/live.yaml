@@ -1,0 +1,9 @@
+symbol: "EURUSD_o"
+risk_per_trade: 0.01
+risk_reward_ratio: 2.0
+strategy:
+  model_path: "models/lstm_model.h5"
+  parameters:
+    model_path: "models/lstm_model.h5"
+    threshold_buy: 0.6
+    threshold_sell: 0.4
