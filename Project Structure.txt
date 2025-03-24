@@ -1,0 +1,43 @@
+forex_robot/
+├── main.py                         # Entry point; supports modes: live, backtest, train, optimize, admin.
+├── README.md                       # Project overview and instructions.
+├── requirements.txt                # Python package dependencies.
+├── __init__.py                     # Root package initializer.
+├── config/
+│   ├── secret.yaml                 # Contains MT5 credentials.
+│   ├── settings.py                 # Centralized parameters for trading, indicators, risk, LSTM hyperparameters, and optimization.
+│   └── __init__.py
+├── data/
+│   └── historical.csv              # Historical CSV data for backtesting/training.
+├── docs/
+│   └── screenshots/                # Dashboard screenshots.
+│       ├── backtest_dashboard.png
+│       └── live_dashboard.png
+├── logs/
+│   └── trading.log                 # Log file.
+├── models/
+│   ├── deepseek_model.joblib       # Saved trained model.
+│   └── scaler.joblib               # Saved scaler.
+├── src/
+│   ├── admin/
+│   │   └── admin.py                # Admin interface for monitoring/updating settings and trade history.
+│   ├── core/
+│   │   ├── AdvancedTradingBot.py   # Core trading bot (market data, trade execution, risk management, optimization).
+│   │   ├── LSTMTradingStrategy.py    # Advanced LSTM training with validation monitoring.
+│   │   └── DataManager.py          # Basic DataManager to load historical data.
+│   ├── optimizer/
+│   │   └── optimizer.py            # Parameter optimization routines.
+│   ├── risk/
+│   │   ├── AdvancedRiskManager.py  # Dynamic risk management functions.
+│   │   ├── circuit_breaker.py      # Circuit breaker logic.
+│   │   └── PerformanceMonitor.py   # Performance monitoring.
+│   └── utils/
+│       ├── logger.py               # Centralized logger configuration.
+│       └── config.py               # YAML configuration loader.
+└── tests/
+    ├── test_backtest.py            # Unit tests for backtesting.
+    ├── test_broker.py              # Unit tests for broker functionality.
+    ├── test_DataManager.py         # Unit tests for DataManager.
+    ├── test_risk_management.py     # Unit tests for risk management.
+    ├── test_strategy.py            # Unit tests for strategy functions.
+    └── __init__.py

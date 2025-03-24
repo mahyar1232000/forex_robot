@@ -1,0 +1,36 @@
+2025-03-22 02:59:27,183 - forex_robot - INFO - Starting Forex Robot in train mode.
+2025-03-22 03:29:26,130 - forex_robot - INFO - Starting Forex Robot in live mode.
+2025-03-22 03:29:26,488 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:29:31,519 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:29:36,524 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:29:40,407 - forex_robot - INFO - Live trading interrupted by user.
+2025-03-22 03:30:06,856 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 03:30:06,856 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 03:30:47,033 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 03:30:47,033 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 03:31:07,421 - forex_robot - INFO - Backtest completed.
+2025-03-22 03:31:32,178 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 03:31:32,179 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 03:31:52,575 - forex_robot - INFO - Backtest completed.
+2025-03-22 03:33:13,406 - forex_robot - INFO - Starting Forex Robot in live mode.
+2025-03-22 03:33:13,495 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:33:18,500 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:33:23,514 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:33:28,528 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 03:33:33,062 - forex_robot - INFO - Live trading interrupted by user.
+2025-03-22 04:09:19,821 - forex_robot - INFO - Starting Forex Robot in live mode.
+2025-03-22 04:09:19,933 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 04:09:42,716 - forex_robot - INFO - Live trading interrupted by user.
+2025-03-22 04:10:01,479 - forex_robot - INFO - Starting Forex Robot in live mode.
+2025-03-22 04:10:01,573 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 04:11:01,576 - forex_robot - INFO - Generated signal: SELL
+2025-03-22 04:11:07,851 - forex_robot - INFO - Live trading interrupted by user.
+2025-03-22 04:11:48,034 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 04:11:48,036 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 04:13:56,311 - forex_robot - INFO - Backtest completed.
+2025-03-22 04:14:37,476 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 04:14:37,477 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 11:50:24,248 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 11:50:24,255 - forex_robot - INFO - Starting backtest mode.
+2025-03-22 11:50:50,597 - forex_robot - INFO - Starting Forex Robot in backtest mode.
+2025-03-22 11:50:50,598 - forex_robot - INFO - Starting backtest mode.
