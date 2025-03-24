@@ -21,7 +21,7 @@ rsi_period = 12  # RSI period.
 # Backtesting Parameters
 # ----------------------------
 backtest_days = 30  # Days of historical data for backtesting.
-analysis_period = 1000  # Number of candles used in live analysis.
+analysis_period = 200  # Number of candles used in live analysis.
 historical_data_path = "data/historical.csv"  # Path to historical data.
 
 # ----------------------------

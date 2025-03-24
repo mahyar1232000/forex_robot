@@ -173,25 +173,12 @@ class AdvancedTradingBot:
 
     def detect_market_regime(self, df: pd.DataFrame) -> str:
         try:
-            # If not enough data is available, attempt to fetch extra historical data.
             if len(df) < 50:
-                from datetime import datetime, timedelta
-                extra_start = datetime.now() - timedelta(days=30)
-                extra_rates = mt5.copy_rates_range(
-                    self.config['SYMBOL'],
-                    self.config.get('timeframe', 15),
-                    extra_start,
-                    datetime.now()
-                )
-                if extra_rates is not None and len(extra_rates) >= 50:
-                    df_extra = self.process_data(extra_rates)
-                    # Combine the extra data with the current live data.
-                    df = pd.concat([df, df_extra]).drop_duplicates(subset='time').sort_values('time')
-                else:
-                    return "sideways"  # Quietly default if still insufficient.
+                logger.warning("Not enough data for market regime detection; defaulting to 'sideways'.")
+                return "sideways"
             atr_ma_series = df['ATR'].rolling(window=50).mean()
-            # If ATR rolling mean cannot be computed, default silently.
             if atr_ma_series.empty or np.isnan(atr_ma_series.iloc[-1]):
+                logger.warning("ATR rolling mean not available; defaulting to 'sideways'.")
                 return "sideways"
             atr_ma = atr_ma_series.iloc[-1]
             latest = df.iloc[-1]
@@ -230,7 +217,9 @@ class AdvancedTradingBot:
         df['ENGULFING'] = talib.CDLENGULFING(df['open'], df['high'], df['low'], df['close'])
         df['ATR_MA'] = df['ATR'].rolling(window=50).mean()
         df = self.feature_engineering(df)
-        df.dropna(inplace=True)
+        # Instead of dropping all NaNs, drop only rows where ATR is missing.
+        df = df[df['ATR'].notna()]
+        logger.info(f"Data after processing: {len(df)} rows")
         return df
 
     def get_market_data(self) -> pd.DataFrame:
