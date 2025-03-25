@@ -3,11 +3,11 @@
 # ----------------------------
 # Trading & Broker Settings
 # ----------------------------
-SYMBOL = "EURUSD_o"  # Default symbol EURUSD_o.
+SYMBOL = "EURUSD_o"  # Default symbol.
 MAGIC_NUMBER = 202308  # Unique trade identifier.
 INITIAL_BALANCE = 200.0  # Starting balance for backtesting.
-TIME_SLEEP = 15  # Minutes to wait between trade iterations.
-REPEAT_BACKTEST = True  # Whether to run repeated backtests.
+TIME_SLEEP = 15  # Minutes between trade iterations.
+REPEAT_BACKTEST = True
 
 # ----------------------------
 # Technical Indicator Parameters
@@ -21,8 +21,8 @@ rsi_period = 12  # RSI period.
 # Backtesting Parameters
 # ----------------------------
 backtest_days = 30  # Days of historical data for backtesting.
-analysis_period = 200  # Number of candles used in live analysis.
-historical_data_path = "data/historical.csv"  # Path to historical data.
+analysis_period = 500  # Number of bars to retrieve.
+historical_data_path = "data/historical.csv"
 
 # ----------------------------
 # Risk Management Settings
@@ -43,7 +43,7 @@ atr_multiplier_sideways = 2.0  # ATR multiplier in sideways markets.
 # ----------------------------
 # Trade Execution Settings
 # ----------------------------
-min_confidence = 0.5  # Minimum confidence (%) required to trigger a trade. confidence is in the range [0, 1] (for example, 0.62 means 62%)
+min_confidence = 0.5  # Minimum confidence (e.g., 0.5 means 50%) required to trigger a trade.
 
 # ----------------------------
 # LSTM Strategy Settings
@@ -52,12 +52,6 @@ lstm_sequence_length = 50  # LSTM sequence length.
 lstm_epochs = 120  # Training epochs.
 lstm_batch_size = 128  # Batch size.
 lstm_patience = 15  # Patience for early stopping.
-
-# ----------------------------
-# Additional Admin Settings
-# ----------------------------
-admin_enabled = True  # Set to True to enable admin monitoring.
-admin_check_interval = 1  # Admin check interval (in minutes) during live/backtest runs.
 
 # ----------------------------
 # Optimization Settings

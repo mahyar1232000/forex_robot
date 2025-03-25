@@ -6,10 +6,6 @@ Provides dynamic risk management functions.
 
 
 def calculate_dynamic_risk(account_balance, base_risk_percent):
-    """
-    Adjust the risk percentage dynamically.
-    Increase risk if balance rises (up to 2x base) and reduce if it falls (minimum 50% of base).
-    """
     INITIAL_BALANCE = 200.0
     if account_balance >= INITIAL_BALANCE:
         factor = 1 + min((account_balance - INITIAL_BALANCE) / INITIAL_BALANCE * 0.1, 1.0)

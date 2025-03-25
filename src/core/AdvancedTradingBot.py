@@ -4,7 +4,7 @@ AdvancedTradingBot.py
 Main trading bot for advanced trading.
 Supports live/backtest modes and parameter optimization.
 Integrates market data processing, trade execution, dynamic risk management,
-a circuit breaker, performance monitoring, and integrated admin monitoring.
+a circuit breaker, performance monitoring.
 Trained model and scaler files are stored in the 'models' folder.
 """
 
@@ -24,15 +24,14 @@ from src.utils.logger import get_logger
 from src.risk.AdvancedRiskManager import calculate_dynamic_risk
 from src.risk.circuit_breaker import check_circuit_breaker
 from src.risk.PerformanceMonitor import PerformanceMonitor
-from src.admin.admin import AdminInterface
 
 logger = get_logger(__name__)
+
 
 class AdvancedTradingBot:
     """
     AdvancedTradingBot handles live trading, backtesting, and parameter optimization.
     It loads or creates the trained model and scaler from the 'models' folder.
-    If admin monitoring is enabled, it periodically triggers an admin check to allow adjustments.
     """
 
     def __init__(self, config_params=None):
@@ -55,8 +54,6 @@ class AdvancedTradingBot:
         self.model = None
         self.scaler = None
         self.performance_monitor = PerformanceMonitor()
-        self.admin_interface = AdminInterface(self)
-        self.last_admin_check = datetime.now()
         self.initialize_components()
 
     def initialize_components(self):
@@ -64,7 +61,7 @@ class AdvancedTradingBot:
         self.load_or_create_model()
 
     def cleanup_legacy_files(self):
-        # Remove legacy files from the root if they exist.
+        # Remove any legacy files from the root.
         for fname in ['deepseek_model.joblib', 'scaler.joblib']:
             if os.path.exists(fname):
                 try:
@@ -126,15 +123,15 @@ class AdvancedTradingBot:
             self.config.update(secret_config)
         for attempt in range(retries):
             try:
-                logger.info(f"Initializing MT5 (attempt {attempt+1}/{retries})")
+                logger.info(f"Initializing MT5 (attempt {attempt + 1}/{retries})")
                 if not mt5.initialize():
                     error_info = mt5.last_error()
                     logger.error(f"MT5 initialization failed. Error: {error_info}")
                 else:
                     if not mt5.login(
-                        login=self.config['mt5']['account'],
-                        password=self.config['mt5']['password'],
-                        server=self.config['mt5']['server']
+                            login=self.config['mt5']['account'],
+                            password=self.config['mt5']['password'],
+                            server=self.config['mt5']['server']
                     ):
                         error_info = mt5.last_error()
                         logger.error(f"MT5 login failed. Error: {error_info}")
@@ -174,11 +171,22 @@ class AdvancedTradingBot:
     def detect_market_regime(self, df: pd.DataFrame) -> str:
         try:
             if len(df) < 50:
-                logger.warning("Not enough data for market regime detection; defaulting to 'sideways'.")
-                return "sideways"
+                # Attempt to fetch extra historical data if live data is insufficient.
+                from datetime import datetime, timedelta
+                extra_start = datetime.now() - timedelta(days=30)
+                extra_rates = mt5.copy_rates_range(
+                    self.config['SYMBOL'],
+                    self.config.get('timeframe', 15),
+                    extra_start,
+                    datetime.now()
+                )
+                if extra_rates is not None and len(extra_rates) >= 50:
+                    df_extra = self.process_data(extra_rates)
+                    df = pd.concat([df, df_extra]).drop_duplicates(subset='time').sort_values('time')
+                else:
+                    return "sideways"
             atr_ma_series = df['ATR'].rolling(window=50).mean()
             if atr_ma_series.empty or np.isnan(atr_ma_series.iloc[-1]):
-                logger.warning("ATR rolling mean not available; defaulting to 'sideways'.")
                 return "sideways"
             atr_ma = atr_ma_series.iloc[-1]
             latest = df.iloc[-1]
@@ -217,7 +225,6 @@ class AdvancedTradingBot:
         df['ENGULFING'] = talib.CDLENGULFING(df['open'], df['high'], df['low'], df['close'])
         df['ATR_MA'] = df['ATR'].rolling(window=50).mean()
         df = self.feature_engineering(df)
-        # Instead of dropping all NaNs, drop only rows where ATR is missing.
         df = df[df['ATR'].notna()]
         logger.info(f"Data after processing: {len(df)} rows")
         return df
@@ -228,19 +235,20 @@ class AdvancedTradingBot:
                 return pd.DataFrame()
             rates = mt5.copy_rates_from_pos(self.config['SYMBOL'],
                                             self.config.get('timeframe', 15),
-                                            0, self.config.get('analysis_period', 100))
+                                            0, self.config.get('analysis_period', 1000))
             if rates is None or len(rates) == 0:
                 logger.error(f"Market data error: {mt5.last_error()}")
                 return pd.DataFrame()
             df_live = self.process_data(rates)
-            # If live data is insufficient for regime detection, fetch extra historical data.
             if len(df_live) < 50:
                 from datetime import datetime, timedelta
                 extra_start = datetime.now() - timedelta(days=30)
-                extra_rates = mt5.copy_rates_range(self.config['SYMBOL'],
-                                                   self.config.get('timeframe', 15),
-                                                   extra_start,
-                                                   datetime.now())
+                extra_rates = mt5.copy_rates_range(
+                    self.config['SYMBOL'],
+                    self.config.get('timeframe', 15),
+                    extra_start,
+                    datetime.now()
+                )
                 if extra_rates is not None and len(extra_rates) >= 50:
                     df_extra = self.process_data(extra_rates)
                     df_combined = pd.concat([df_extra, df_live]).drop_duplicates(subset='time').sort_values('time')
@@ -323,19 +331,6 @@ class AdvancedTradingBot:
                 'RR_ratio': self.config.get('RISK_REWARD_RATIO', 2.0)
             }
 
-    def admin_monitor(self):
-        """
-        Checks periodically if admin intervention is needed.
-        If admin_enabled is True and the specified interval has passed, trigger a one-time admin check.
-        """
-        if self.config.get("admin_enabled", False):
-            now = datetime.now()
-            interval = self.config.get("admin_check_interval", 1)  # in minutes
-            if (now - self.last_admin_check).total_seconds() >= interval * 60:
-                logger.info("Admin monitor triggered.")
-                self.admin_interface.run_once()
-                self.last_admin_check = now
-
     def execute_trade(self, signal: dict) -> bool:
         if signal.get("signal", "HOLD") == "HOLD":
             logger.info("Signal is HOLD; no trade executed.")
@@ -347,7 +342,6 @@ class AdvancedTradingBot:
             return False
         dynamic_risk = calculate_dynamic_risk(self.account_balance, self.config.get('RISK_PERCENT', 1.0))
         self.config['RISK_PERCENT'] = dynamic_risk
-        self.admin_monitor()  # Check for admin intervention.
         if self.config.get('backtest_mode', False):
             return self.backtest_trade(signal)
         return self.execute_live_trade(signal)
@@ -382,7 +376,8 @@ class AdvancedTradingBot:
                     break
         if profit == 0:
             close_price = future_data.iloc[-1]['close'] if not future_data.empty else entry_price
-            profit = (close_price - entry_price) * position_size if signal['signal'] == 'BUY' else (entry_price - close_price) * position_size
+            profit = (close_price - entry_price) * position_size if signal['signal'] == 'BUY' else (
+                                                                                                               entry_price - close_price) * position_size
         self.account_balance += profit
         self.equity_high = max(self.equity_high, self.account_balance)
         self.trade_history.append({
@@ -472,14 +467,19 @@ class AdvancedTradingBot:
         tick = mt5.symbol_info_tick(self.config['SYMBOL'])
         entry_price = tick.ask if signal['signal'] == 'BUY' else tick.bid
         rr = self.config.get('RISK_REWARD_RATIO', 2.0)
-        return entry_price + (signal['stop_loss'] * rr) if signal['signal'] == 'BUY' else entry_price - (signal['stop_loss'] * rr)
+        return entry_price + (signal['stop_loss'] * rr) if signal['signal'] == 'BUY' else entry_price - (
+                    signal['stop_loss'] * rr)
 
     def safety_checks(self) -> bool:
         if self.config.get('backtest_mode', False):
             return True
-        now = datetime.now().time()
-        if (dtime(21, 0) <= now <= dtime(23, 59)) or (dtime(0, 0) <= now <= dtime(2, 0)):
-            logger.warning("Avoiding trading during market close hours")
+        # Convert current local time to Eastern Time (New York)
+        market_tz = pytz.timezone('America/New_York')
+        now_market = datetime.now(market_tz).time()
+        # Example condition: Avoid trading if current Eastern Time is between 21:00 and 23:59 or between 0:00 and 2:00.
+        # Adjust these times as needed.
+        if (dtime(21, 0) <= now_market <= dtime(23, 59)) or (dtime(0, 0) <= now_market <= dtime(2, 0)):
+            logger.warning(f"Avoiding trading during market close hours (New York time: {now_market}).")
             return False
         if self.account_balance < self.config.get('INITIAL_BALANCE', 200.0) * 0.98:
             logger.warning("Account protection: 2% daily drawdown limit reached")
@@ -504,7 +504,6 @@ class AdvancedTradingBot:
             if signal['confidence'] >= self.config.get('min_confidence', 0.5):
                 if self.execute_trade(signal):
                     trades_executed += 1
-            self.admin_monitor()  # Check for admin intervention during backtest.
             if self.current_index % 100 == 0:
                 self.report_backtest_progress()
         logger.info(f"Total trades executed: {trades_executed}")

@@ -6,10 +6,6 @@ Implements circuit breaker logic to halt trading when drawdown exceeds a defined
 
 
 def check_circuit_breaker(trade_history, current_balance, drawdown_limit=0.05):
-    """
-    Check if the drawdown exceeds drawdown_limit (e.g., 5%).
-    Returns True if trading is allowed, False otherwise.
-    """
     if not trade_history:
         return True
     equity_high = max(record['balance'] for record in trade_history)

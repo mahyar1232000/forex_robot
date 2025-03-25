@@ -1,9 +1,24 @@
 README.md
 
-# AI Forex Trading Robot
+# Forex Robot
 
-This project implements an AI-powered Forex trading robot that connects to the Lite Finance broker via MetaTrader 5. It
-supports both live trading and backtesting modes.
+This project implements an AI Forex Trading Robot with advanced trading strategies, dynamic risk management, and parameter optimization. The system includes:
+
+- **Live Trading:** Executes trades in real time.
+- **Backtesting:** Tests strategy performance on historical data.
+- **Model Training:** Trains an LSTM model with validation monitoring.
+- **Parameter Optimization:** Optimizes trading parameters via grid search.
+- **DeepSeek Integration:** Uses Ollama-hosted DeepSeek-R1-8B for comprehensive code reviews and technical analysis of the project.
+
+## Project Structure
+
+See the provided project structure for details.
+
+## Setup
+
+1. **Activate the Conda Environment:**
+   ```bash
+   conda activate tf_env
 
 ## Features
 
@@ -44,10 +59,6 @@ This project implements a Forex trading robot with live, backtesting, optimizati
 
 forex_robot/ ├── main.py ├── config/ ├── data/ ├── docs/ ├── logs/ ├── models/ ├── src/ └── tests/
 
-less
-Copy
-Edit
-
 ## Usage
 
 Run the robot in your desired mode:
@@ -63,3 +74,30 @@ Edit
 
 ### forex_robot/requirements.txt
 pandas numpy matplotlib PyYAML tensorflow keras scikit-learn MetaTrader5 talib joblib pytz
+
+Usage
+-------
+
+Live Trading:
+python main.py --mode live
+
+
+Backtesting:
+python main.py --mode backtest
+
+
+
+Model Training:
+python main.py --mode train
+
+
+
+Parameter Optimization:
+python main.py --mode optimize
+
+
+
+Code Review with DeepSeek: Run:
+python src/ollama_reviewer.py
+
+to review all Python files in the project.

@@ -3,7 +3,7 @@ LSTMTradingStrategy.py
 
 Implements an advanced LSTM strategy for model training and prediction.
 Includes validation monitoring with ReduceLROnPlateau and EarlyStopping based on val_loss.
-Incorporates additional LSTM layers, dropout, and batch normalization.
+Trains the LSTM model and saves it as models/lstm_model.h5.
 """
 
 import io
@@ -22,7 +22,7 @@ logger = get_logger(__name__)
 class LSTMTradingStrategy:
     def __init__(self, data_path, model_path):
         self.data_path = data_path
-        self.model_path = model_path
+        self.model_path = model_path  # e.g., "models/lstm_model.h5"
         self.config = settings.__dict__.copy()
         self.model = None
 

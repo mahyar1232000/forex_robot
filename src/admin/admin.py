@@ -6,6 +6,7 @@ from config import settings
 
 logger = get_logger(__name__)
 
+
 class AdminInterface:
     def __init__(self, trading_bot):
         self.trading_bot = trading_bot  # Instance of AdvancedTradingBot

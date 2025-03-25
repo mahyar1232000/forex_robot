@@ -1,36 +1,29 @@
 forex_robot/
-├── main.py                         # Entry point; supports modes: live, backtest, train, optimize, admin.
-├── README.md                       # Project overview and instructions.
+├── main.py                         # Entry point for live, backtest, train, or optimize modes.
+├── README.md                       # Project overview, usage instructions, and documentation.
 ├── requirements.txt                # Python package dependencies.
-├── __init__.py                     # Root package initializer.
+├── __init__.py                     # Project package initializer.
 ├── config/
 │   ├── secret.yaml                 # Contains MT5 credentials.
-│   ├── settings.py                 # Centralized parameters for trading, indicators, risk, LSTM hyperparameters, and optimization.
+│   ├── settings.py                 # Centralized parameters for trading, indicators, risk, LSTM hyperparameters, optimization grid, etc.
 │   └── __init__.py
 ├── data/
-│   └── historical.csv              # Historical CSV data for backtesting/training.
-├── docs/
-│   └── screenshots/                # Dashboard screenshots.
-│       ├── backtest_dashboard.png
-│       └── live_dashboard.png
-├── logs/
-│   └── trading.log                 # Log file.
+│   └── historical.csv              # Historical CSV data for backtesting and model training.
 ├── models/
-│   ├── deepseek_model.joblib       # Saved trained model.
+│   ├── deepseek_model.joblib       # Saved trained model (for trading).
 │   └── scaler.joblib               # Saved scaler.
 ├── src/
-│   ├── admin/
-│   │   └── admin.py                # Admin interface for monitoring/updating settings and trade history.
 │   ├── core/
 │   │   ├── AdvancedTradingBot.py   # Core trading bot (market data, trade execution, risk management, optimization).
-│   │   ├── LSTMTradingStrategy.py    # Advanced LSTM training with validation monitoring.
-│   │   └── DataManager.py          # Basic DataManager to load historical data.
+│   │   ├── LSTMTradingStrategy.py  # LSTM training module with validation monitoring.
+│   │   └── DataManager.py          # (Optional) Utilities for loading data.
 │   ├── optimizer/
 │   │   └── optimizer.py            # Parameter optimization routines.
+│   ├── ollama_reviewer.py          # Integration with Ollama-hosted DeepSeek-R1-8B for code review/analysis.
 │   ├── risk/
 │   │   ├── AdvancedRiskManager.py  # Dynamic risk management functions.
 │   │   ├── circuit_breaker.py      # Circuit breaker logic.
-│   │   └── PerformanceMonitor.py   # Performance monitoring.
+│   │   └── PerformanceMonitor.py   # Monitors and reports trading performance.
 │   └── utils/
 │       ├── logger.py               # Centralized logger configuration.
 │       └── config.py               # YAML configuration loader.
